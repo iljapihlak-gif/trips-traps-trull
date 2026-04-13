@@ -1,0 +1,66 @@
+def kuva_laud(laud):
+    for rida in laud:
+        print(" | ".join(rida))
+        print("-" * 5)
+
+def kontrolli_voidu(laud, mark):
+    # read
+    for rida in laud:
+        if all(v == mark for v in rida):
+            return True
+    
+    # veerud
+    for i in range(3):
+        if all(laud[r][i] == mark for r in range(3)):
+            return True
+    
+    # diagonaalid
+    if all(laud[i][i] == mark for i in range(3)):
+        return True
+    if all(laud[i][2 - i] == mark for i in range(3)):
+        return True
+    
+    return False
+
+def kas_tais(laud):
+    return all(v != " " for rida in laud for v in rida)
+
+def mang():
+    laud = [[" " for _ in range(3)] for _ in range(3)]
+    mangija = "X"
+    
+    while True:
+        kuva_laud(laud)
+        print(f"Mängija {mangija} kord")
+        
+        try:
+            r = int(input("Sisesta rida (0-2): "))
+            c = int(input("Sisesta veerg (0-2): "))
+        except ValueError:
+            print("Palun sisesta number!")
+            continue
+        
+        if r not in range(3) or c not in range(3):
+            print("Väärtus peab olema 0–2!")
+            continue
+        
+        if laud[r][c] != " ":
+            print("See koht on juba võetud!")
+            continue
+        
+        laud[r][c] = mangija
+        
+        if kontrolli_voidu(laud, mangija):
+            kuva_laud(laud)
+            print(f"Mängija {mangija} võitis!")
+            break
+        
+        if kas_tais(laud):
+            kuva_laud(laud)
+            print("Viik!")
+            break
+        
+        mangija = "O" if mangija == "X" else "X"
+
+if __name__ == "__main__":
+    mang()
